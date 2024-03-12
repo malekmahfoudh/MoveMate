@@ -8,8 +8,6 @@ interface ModalProps {
     setTask: (task: string) => void;
     comment: string;
     setComment: (comment: string) => void;
-    reminder: string;
-    setReminder: (reminder: string) => void;
     onAdd: () => void;
     children?: React.ReactNode;
   }
@@ -24,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="modal">
       <div className="modal_content">
-        <button onClick={onClose}>Close</button>
+        <button className="close_btn" onClick={onClose}>X</button>
         {children}
       </div>
     </div>

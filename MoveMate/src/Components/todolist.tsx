@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import Modal from "./modal";
+import AddTaskForm from "./addTaskForm";
 import "../Styles/TodoList.scss";
 
 interface Todo {
   id: number;
   task: string;
   comment?: string;
-  reminder?: Date;
   isCompleted: boolean;
 }
 
@@ -16,35 +16,30 @@ const TodoList: React.FC = () => {
       id: 1,
       task: "First todo",
       comment: "First comment",
-      reminder: new Date(),
       isCompleted: false,
     },
     {
       id: 2,
       task: "Second todo",
       comment: "Second comment",
-      reminder: new Date(),
       isCompleted: false,
     },
     {
       id: 3,
       task: "Third todo",
       comment: "Third comment",
-      reminder: new Date(),
       isCompleted: false,
     },
     {
       id: 4,
       task: "Fourth todo",
       comment: "Fourth comment",
-      reminder: new Date(),
       isCompleted: false,
     },
   ]);
 
   const [task, setTask] = useState("");
   const [comment, setComment] = useState("");
-  const [reminder, setReminder] = useState<string | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
@@ -63,42 +58,29 @@ const TodoList: React.FC = () => {
       id: newId,
       task,
       comment,
-      reminder: reminder ? new Date(reminder) : undefined,
       isCompleted: false,
     };
 
     setTodos([...todos, newTodo]);
     setTask("");
     setComment("");
-    setReminder(undefined);
     setIsModalOpen(false);
   };
 
   const openModalToAdd = (): void => {
-    setTask("");
-    setComment("");
-    setReminder(undefined);
-
     setModalContent(
-      <>
-        <input
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-          placeholder="Add todo"
-        />
-        <input
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          placeholder="Add comment"
-        />
-        <input
-          type="date"
-          value={reminder || ""}
-          onChange={(e) => setReminder(e.target.value)}
-          placeholder="Add reminder"
-        />
-        <button onClick={addTodo}>Add Todo</button>
-      </>
+      <AddTaskForm onAdd={(task, comment) => {
+        const newId = todos.length > 0 ? Math.max(...todos.map(t => t.id)) + 1 : 1;
+        const newTodo: Todo = {
+          id: newId,
+          task,
+          comment,
+          isCompleted: false,
+        };
+  
+        setTodos([...todos, newTodo]);
+        closeModal();
+      }} />
     );
     setIsModalOpen(true);
   };
@@ -108,9 +90,7 @@ const TodoList: React.FC = () => {
       <>
         <h2>{todo.task}</h2>
         <p>{todo.comment ? todo.comment : "No additional comment"}</p>
-        <p>
-          {todo.reminder ? todo.reminder.toLocaleDateString() : "No set date"}
-        </p>
+        <p></p>
       </>
     );
     setIsModalOpen(true);
@@ -142,7 +122,10 @@ const TodoList: React.FC = () => {
           Add New Task
         </button>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+      >
         {modalContent}
       </Modal>
     </>
