@@ -1,0 +1,22 @@
+@import "variables";
+
+.modal {
+    z-index: 1;
+    position: fixed;
+    top: 8.4rem;
+    left: 2rem;
+    display: flex;
+    justify-content: center;
+    background-color: $overlay-bg-color;
+    width: 83.5%;
+    height: 60%;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.modal_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 15rem;
+}

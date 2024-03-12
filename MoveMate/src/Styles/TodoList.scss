@@ -1,0 +1,42 @@
+@import "variables";
+
+.todoList {
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: $secondary-bg-color;
+    font-family: $primary-font;
+    font-size: $small-font;
+    color: white;
+    margin-top: 2.5rem;
+    border-radius: 20px;
+    
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: .5rem .5rem;
+            border-radius: 10px;
+            background-color: $secondary-accent-color;
+            box-shadow: $todo-shadow;
+ 
+        }
+    }
+    .addNewTask_btn {
+        all: unset;
+        background-color: $primary-accent-color;
+        border-radius: 30px;
+        padding: 1rem 1rem;
+        box-shadow: $todo-shadow;
+    }
+
+}
