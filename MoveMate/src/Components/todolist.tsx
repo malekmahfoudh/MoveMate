@@ -67,6 +67,11 @@ const TodoList: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const deleteTodo = (id: number): void => {
+    setTodos(todos.filter(todo => todo.id !== id));
+    closeModal();
+  };
+
   const openModalToAdd = (): void => {
     setModalContent(
       <AddTaskForm onAdd={(task, comment) => {
@@ -90,7 +95,7 @@ const TodoList: React.FC = () => {
       <>
         <h2>{todo.task}</h2>
         <p>{todo.comment ? todo.comment : "No additional comment"}</p>
-        <p></p>
+        <button onClick={() => deleteTodo(todo.id)}>Delete</button>
       </>
     );
     setIsModalOpen(true);
