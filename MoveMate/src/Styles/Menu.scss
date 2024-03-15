@@ -1,0 +1,44 @@
+@import "variables";
+
+.menu-background {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $overlay-bg-color;
+    backdrop-filter: blur(10px);
+
+}
+.menu {
+    z-index: 1;
+    position: fixed;
+    top: 8.4rem;
+    left: 1.8rem;
+    display: flex;
+    justify-content: center;
+    background-color: $glass-menu-color;
+    width: 45%;
+    height: 60%;
+    transform: translateY(-17%);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+   
+}
+
+.menu_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 15rem;
+
+    .close_btn {
+        all: unset;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 2rem;
+        color: white;
+        cursor: pointer;
+    }
+}
