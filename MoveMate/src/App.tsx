@@ -1,5 +1,4 @@
-import TodoList from './Components/todolist';
-import Header from './Components/header';
+import MainPage from './MainPage';
 import './Styles/App.scss';
 
 
@@ -7,8 +6,7 @@ import './Styles/App.scss';
 function App() {
   return (
     <>
-      <Header />
-      <TodoList />
+      <MainPage />
     </>
   );
 }

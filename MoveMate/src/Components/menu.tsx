@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc} from 'firebase/firestore';
 import { db } from '../firebase/firebase-config'; // Adjust the import based on your file structure
 
 interface MenuProps {
@@ -15,7 +15,7 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, userId }) => {
 
   useEffect(() => {
     const fetchAddresses = async () => {
-      const addressesDocRef = doc(db, 'addresses', userId);
+      const addressesDocRef = doc(db, 'users', userId, 'addresses', 'default');
       const addressesDoc = await getDoc(addressesDocRef);
 
       if (addressesDoc.exists()) {
@@ -32,16 +32,19 @@ const Menu: React.FC<MenuProps> = ({ isOpen, onClose, userId }) => {
   }, [userId]);
 
   const saveNewAddress = async () => {
-    const addressesDocRef = doc(db, 'addresses', userId);
-    const updatedAddresses = [...savedAddresses, newAddress];
-
-    // Update the document or create it if it doesn't exist
-    await setDoc(addressesDocRef, { addresses: updatedAddresses }, { merge: true });
-
-    setCurrentAddress(newAddress);
-    setSavedAddresses(updatedAddresses);
-    setNewAddress('');
+    if (userId) {
+      const userAddressesRef = doc(db, 'users', userId, 'addresses', 'default');
+      const newAddresses = [...savedAddresses, newAddress]; // Append the new address
+      
+      // Update Firestore document with the new addresses array
+      await setDoc(userAddressesRef, { addresses: newAddresses }, { merge: true });
+      
+      setCurrentAddress(newAddress);
+      setSavedAddresses(newAddresses);
+      setNewAddress('');
+    }
   };
+  
 
   if (!isOpen) return null;
 

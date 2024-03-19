@@ -1,17 +1,7 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
 import { getFirestore } from "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-// Initialize Firebase
-
-
-// Initialize Firestore
 const firebaseConfig = {
   apiKey: "AIzaSyB3c5k_cF9x24D-p0Xk6WIItFZ36c0CfQc",
   authDomain: "movemate-d1b64.firebaseapp.com",
@@ -19,9 +9,11 @@ const firebaseConfig = {
   storageBucket: "movemate-d1b64.appspot.com",
   messagingSenderId: "85502338063",
   appId: "1:85502338063:web:b7d7436e66f0b835a2ef7a",
-  measurementId: "G-DR6Q0GHH28"
+  measurementId: "G-DR6Q0GHH28",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const db = getFirestore(app);
+const auth = getAuth();
+
+export { db, auth };
