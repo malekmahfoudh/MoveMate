@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { User } from "firebase/auth";
-import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 import Modal from "./modal";
 import AddTaskForm from "./addTaskForm";
 import "../Styles/TodoList.scss";
 
 interface Todo {
-  id: string;  // Updated to string to match Firestore document IDs
+  id: string; 
   task: string;
   comment?: string;
   isCompleted: boolean;
@@ -49,6 +49,16 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
       console.error("User not logged in");
     }
   };
+
+
+  const toggleTodoCompletion = async (id: string, isCompleted: boolean): Promise<void> => {
+    await updateDoc(doc(db, 'todos', id), {
+      isCompleted: isCompleted,
+    });
+
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, isCompleted: isCompleted } : todo));
+  };
+
 
   const deleteTodo = async (id: string): Promise<void> => {
     await deleteDoc(doc(db, 'todos', id));

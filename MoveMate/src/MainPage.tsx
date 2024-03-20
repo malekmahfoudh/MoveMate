@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useId } from 'react';
-import { auth } from './firebase/firebase-config';
+import React, { useState, useEffect } from 'react';
+import { auth, db } from './firebase/firebase-config';
 import { signInAnonymously, onAuthStateChanged, User } from 'firebase/auth';
+import { collection, addDoc, query, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 import TodoList from './Components/todolist';
 import Header from './Components/header';
@@ -10,62 +11,77 @@ const MainPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
   const [newAddress, setNewAddress] = useState('');
-  const [user, setUser] = useState<User | null>(null);  // Ensure the user state is typed as User | null.
+  const [addresses, setAddresses] = useState<string[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   const openOverlay = () => setIsOverlayOpen(true);
   const closeOverlay = () => setIsOverlayOpen(false);
-  const handleAddressChange = () => {
-    console.log('Save the new address here:', newAddress);
-    // Here you would typically save the address to the database.
-    closeOverlay();
-};
 
-useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        if (currentUser) {
-            console.log(currentUser.uid)
-            setUser(currentUser);  // Set the authenticated user to state.
-        } else {
-            // If no user is signed in, sign in anonymously.
-            signInAnonymously(auth).catch((error) => {
-                console.error(error);
-            });
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      if (user) {
+        const addressesRef = collection(db, 'users', user.uid, 'addresses');
+        const addressDocs = await getDocs(addressesRef);
+        const userAddresses = addressDocs.docs.map(doc => doc.data().address);
+        setAddresses(userAddresses);
+        if (userAddresses.length > 0) {
+          setCurrentAddress(userAddresses[0]);
         }
+      }
+    };
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        fetchAddresses();
+      } else {
+        signInAnonymously(auth).catch(error => console.error(error));
+      }
     });
-    
-    return () => unsubscribe();  // Clean up the subscription on unmount.
-}, []);
 
+    return () => unsubscribe();
+  }, []);
 
-return (
+  const handleAddressChange = async () => {
+    if (user && newAddress.trim() !== '') {
+      const addressesRef = collection(db, 'users', user.uid, 'addresses');
+      await addDoc(addressesRef, { address: newAddress });
+
+      setAddresses([...addresses, newAddress]);
+      setCurrentAddress(newAddress);
+      setNewAddress('');
+      closeOverlay();
+    }
+  };
+
+  return (
     <>
       <Header />
-      <TodoList user={user} />  {/* Pass the user object to TodoList. */}
+      <TodoList user={user} />
       <div className="service" onClick={openOverlay}>Change Address</div>
       {isOverlayOpen && (
-          <div className="overlay">
+        <div className="overlay">
           <div className="overlay-content">
             <button className="close-btn" onClick={closeOverlay}>X</button>
             <label>Current Address:</label>
-            <input
-              type="text"
-              value={currentAddress}
-              onChange={(e) => setCurrentAddress(e.target.value)}
-              placeholder="Current Address"
-              />
+            <select value={currentAddress} onChange={e => setCurrentAddress(e.target.value)}>
+              {addresses.map((address, index) => (
+                <option key={index} value={address}>{address}</option>
+              ))}
+            </select>
             <label>New Address:</label>
             <input
               type="text"
               value={newAddress}
-              onChange={(e) => setNewAddress(e.target.value)}
+              onChange={e => setNewAddress(e.target.value)}
               placeholder="New Address"
-              />
-            <button onClick={handleAddressChange}>Change Address</button>
+            />
+            <button onClick={handleAddressChange}>Save New Address</button>
           </div>
         </div>
       )}
     </>
   );
-}
+};
 
 export default MainPage;
