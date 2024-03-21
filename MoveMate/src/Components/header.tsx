@@ -2,8 +2,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import MoveMateMainpageLogo from "../assets/MoveMateMainpageLogo.svg";
-import menuicon from "../assets/menuicon.svg";
-import Menu from "./menu";
+// import menuicon from "../assets/menuicon.svg";
+// import Menu from "./menu";
 import "../Styles/Header.scss";
 
 const Header: React.FC = () => {
@@ -29,21 +29,21 @@ const Header: React.FC = () => {
   return (
     <>
       <header>
-        <img
+        {/* <img
           className="menu-btn"
           onClick={openMenu}
           src={menuicon}
           alt="Menu"
-        />
+        /> */}
         <img className="logo" src={MoveMateMainpageLogo} alt="MoveMate Logo" />
       </header>
-      {userId && isMenuOpen && (
+      {/* {userId && isMenuOpen && (
         <Menu
           isOpen={isMenuOpen}
           onClose={() => setIsMenuOpen(false)}
           userId={userId}
         />
-      )}
+      )} */}
     </>
   );
 };

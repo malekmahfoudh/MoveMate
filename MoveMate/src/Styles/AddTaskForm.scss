@@ -3,7 +3,33 @@
 .addTodo_modal {
     display: flex;
     flex-direction: column;
-    
+    justify-content: center;
+    margin-top: 5rem;
+    gap: 3rem;
 
+    .input_fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 6rem;
+        background-color: $secondary-accent-color;
+        padding: 3rem 2.5rem;
+        border-radius: 10px;
 
+        input {
+            all: unset;
+            text-align: left;
+            text-decoration: underline black;
+            color: black;
+            margin-bottom: 1.5rem;
+        }
+    }
+}
+
+.add_task-btn {
+    all: unset;
+    background-color: $primary-accent-color;
+    border-radius: 30px;
+    padding: 1rem 1rem;
+    box-shadow: $todo-shadow;
 }

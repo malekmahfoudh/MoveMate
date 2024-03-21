@@ -20,13 +20,19 @@
     justify-content: center;
     margin-bottom: 15rem;
 
+
+
     .close_btn {
-        all: unset;
+        background-image: url("../assets/exit-btn.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-color: transparent;
+        border: none;
+        height: 33px;
+        width: 33px;
         position: absolute;
-        top: 1rem;
-        right: 1rem;
-        font-size: 2rem;
-        color: white;
+        top: 20px;
+        right: 15px;
         cursor: pointer;
     }
 }

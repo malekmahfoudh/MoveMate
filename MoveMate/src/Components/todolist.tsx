@@ -21,6 +21,7 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+  
 
   useEffect(() => {
     if (user) {
@@ -50,7 +51,6 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     }
   };
 
-
   const toggleTodoCompletion = async (id: string, isCompleted: boolean): Promise<void> => {
     await updateDoc(doc(db, 'todos', id), {
       isCompleted: isCompleted,
@@ -59,47 +59,44 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     setTodos(todos.map(todo => todo.id === id ? { ...todo, isCompleted: isCompleted } : todo));
   };
 
-
   const deleteTodo = async (id: string): Promise<void> => {
     await deleteDoc(doc(db, 'todos', id));
   };
 
   const openModalToAdd = (): void => {
     setIsModalOpen(true);
-    setModalContent(
-      <AddTaskForm onAdd={addTodo} />
-    );
+    setModalContent(<AddTaskForm onAdd={addTodo} />);
   };
 
   const openModalToView = (todo: Todo): void => {
     setIsModalOpen(true);
     setModalContent(
-      <>
+      <div className="todo_modal">
         <h2>{todo.task}</h2>
         <p>{todo.comment ? todo.comment : "No additional comment"}</p>
-        <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-      </>
+        <button className="delete_btn" onClick={() => deleteTodo(todo.id)}>Delete</button>
+      </div>
     );
   };
 
   const closeModal = (): void => setIsModalOpen(false);
 
+  // Split todos into incomplete and completed
+  const incompleteTodos = todos.filter(todo => !todo.isCompleted);
+  const completedTodos = todos.filter(todo => todo.isCompleted);
+
   return (
     <>
       <div className="todoList">
         <ul>
-          {todos.map((todo) => (
-            <li
-              key={todo.id}
-              onClick={() => openModalToView(todo)}
-              style={{ cursor: "pointer" }}
-            >
+          {incompleteTodos.map(todo => (
+            <li key={todo.id} onClick={() => openModalToView(todo)} style={{ cursor: "pointer" }}>
               {todo.task}
               <input
                 type="checkbox"
                 checked={todo.isCompleted}
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => toggleTodoCompletion(todo.id, e.target.checked)}
+                onClick={e => e.stopPropagation()}
+                onChange={e => toggleTodoCompletion(todo.id, e.target.checked)}
               />
             </li>
           ))}
@@ -107,6 +104,19 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
         <button className="addNewTask_btn" onClick={openModalToAdd}>
           Add New Task
         </button>
+        <ul>
+          {completedTodos.map(todo => (
+            <li key={todo.id} onClick={() => openModalToView(todo)} style={{ cursor: "pointer" }}>
+              {todo.task}
+              <input
+                type="checkbox"
+                checked={todo.isCompleted}
+                onClick={e => e.stopPropagation()}
+                onChange={e => toggleTodoCompletion(todo.id, e.target.checked)}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {modalContent}

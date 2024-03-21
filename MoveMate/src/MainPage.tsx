@@ -58,11 +58,11 @@ const MainPage = () => {
     <>
       <Header />
       <TodoList user={user} />
-      <div className="service" onClick={openOverlay}>Change Address</div>
+      <div className="service" onClick={openOverlay}></div>
       {isOverlayOpen && (
         <div className="overlay">
           <div className="overlay-content">
-            <button className="close-btn" onClick={closeOverlay}>X</button>
+            <button className="close-btn" onClick={closeOverlay}></button>
             <label>Current Address:</label>
             <select value={currentAddress} onChange={e => setCurrentAddress(e.target.value)}>
               {addresses.map((address, index) => (
@@ -76,7 +76,7 @@ const MainPage = () => {
               onChange={e => setNewAddress(e.target.value)}
               placeholder="New Address"
             />
-            <button onClick={handleAddressChange}>Save New Address</button>
+            <button className='adress_btn' onClick={handleAddressChange}>Save New Address</button>
           </div>
         </div>
       )}

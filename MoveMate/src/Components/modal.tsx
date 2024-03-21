@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="modal">
       <div className="modal_content">
-        <button className="close_btn" onClick={onClose}>X</button>
+        <button className="close_btn" onClick={onClose}></button>
         {children}
       </div>
     </div>
