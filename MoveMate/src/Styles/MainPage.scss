@@ -4,6 +4,7 @@
   cursor: pointer;
   height: 100px;
   width: 100px;
+  margin: 0 auto;
   background-color: $secondary-accent-color;
   background-image: url("../assets/skatteverket-logo.svg");
   background-repeat: no-repeat;
@@ -13,17 +14,25 @@
 }
 
 .overlay {
-  z-index: 1;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 2rem;
   position: fixed;
-  top: 8.4rem;
-  left: 2rem;
+  top: 8.4rem; 
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: $overlay-bg-color;
-  width: 83.5%;
-  height: 60%;
+  max-width: 22.25rem;
   border-radius: 20px;
   backdrop-filter: blur(10px);
+
 }
 
 .overlay-content {
@@ -32,7 +41,6 @@
   justify-content: center;
   gap: 2rem;
   margin-bottom: 10rem;
-  
 
   .close-btn {
     background-image: url("../assets/exit-btn.svg");
@@ -48,11 +56,22 @@
     cursor: pointer;
   }
 
-  .adress_btn {
+  .address_btn {
     all: unset;
     background-color: $primary-accent-color;
     border-radius: 30px;
     padding: 1rem 1rem;
     box-shadow: $todo-shadow;
   }
+  .address_input {
+    all: unset;
+    text-align: left;
+    text-decoration: underline black;
+    color: black;
+    margin-bottom: 1.5rem;
+  
+  }
+}
+
+@media screen and (min-width: 768px) {
 }

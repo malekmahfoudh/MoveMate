@@ -14,6 +14,7 @@
   color: white;
   margin-top: 2.5rem;
   border-radius: 20px;
+  max-width: 22.25rem;
 
   ul {
     list-style: none;
@@ -45,7 +46,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding-top: 10rem;
+    padding-bottom: 10rem;
 }
 .delete_btn {
   margin-top: 3rem !important;
@@ -67,4 +68,14 @@
     border-radius: 30px;
     padding: 1rem 1rem;
     box-shadow: $todo-shadow;
+}
+
+@media only screen and (min-width: 768px) {
+    .todoList {
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .todoList {
+    }
 }

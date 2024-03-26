@@ -15,18 +15,18 @@ const AddTaskForm: React.FC<AddTaskFromProps> = ({ onAdd }) => {
         <input
           type="text"
           value={task}
-          placeholder="Title                                       "
+          placeholder="Titel                                       "
           onChange={(e) => setTask(e.target.value)}
         />
         <input
           type="text"
           value={comment}
-          placeholder="Comment                           "
+          placeholder="Kommentar                       "
           onChange={(e) => setComment(e.target.value)}
         />
       </div>
       <button className="add_task-btn" onClick={() => onAdd(task, comment)}>
-        Add New ToDo
+        Lägg till Todo
       </button>
     </div>
   );

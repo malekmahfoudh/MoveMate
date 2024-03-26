@@ -73,15 +73,14 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     setModalContent(
       <div className="todo_modal">
         <h2>{todo.task}</h2>
-        <p>{todo.comment ? todo.comment : "No additional comment"}</p>
-        <button className="delete_btn" onClick={() => deleteTodo(todo.id)}>Delete</button>
+        <p>{todo.comment ? todo.comment : "Inga kommentarer"}</p>
+        <button className="delete_btn" onClick={() => deleteTodo(todo.id)}>Radera Todo</button>
       </div>
     );
   };
 
   const closeModal = (): void => setIsModalOpen(false);
 
-  // Split todos into incomplete and completed
   const incompleteTodos = todos.filter(todo => !todo.isCompleted);
   const completedTodos = todos.filter(todo => todo.isCompleted);
 
@@ -102,7 +101,7 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
           ))}
         </ul>
         <button className="addNewTask_btn" onClick={openModalToAdd}>
-          Add New Task
+          Lägg till Todo
         </button>
         <ul>
           {completedTodos.map(todo => (
