@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { User } from "firebase/auth";
-import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 import Modal from "./modal";
 import AddTaskForm from "./addTaskForm";
 import "../Styles/TodoList.scss";
 
 interface Todo {
-  id: string; 
+  id: string;
   task: string;
   comment?: string;
   isCompleted: boolean;
@@ -21,11 +30,10 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
-  
 
   useEffect(() => {
     if (user) {
-      const q = query(collection(db, 'todos'), where('userId', '==', user.uid));
+      const q = query(collection(db, "todos"), where("userId", "==", user.uid));
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const todosData: Todo[] = [];
         querySnapshot.forEach((doc) => {
@@ -38,9 +46,9 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     }
   }, [user]);
 
-  const addTodo = async (task: string, comment: string = ''): Promise<void> => {
+  const addTodo = async (task: string, comment: string = ""): Promise<void> => {
     if (user && user.uid) {
-      await addDoc(collection(db, 'todos'), {
+      await addDoc(collection(db, "todos"), {
         task: task,
         comment: comment,
         isCompleted: false,
@@ -51,16 +59,23 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     }
   };
 
-  const toggleTodoCompletion = async (id: string, isCompleted: boolean): Promise<void> => {
-    await updateDoc(doc(db, 'todos', id), {
+  const toggleTodoCompletion = async (
+    id: string,
+    isCompleted: boolean
+  ): Promise<void> => {
+    await updateDoc(doc(db, "todos", id), {
       isCompleted: isCompleted,
     });
 
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, isCompleted: isCompleted } : todo));
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, isCompleted: isCompleted } : todo
+      )
+    );
   };
 
   const deleteTodo = async (id: string): Promise<void> => {
-    await deleteDoc(doc(db, 'todos', id));
+    await deleteDoc(doc(db, "todos", id));
   };
 
   const openModalToAdd = (): void => {
@@ -74,28 +89,36 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
       <div className="todo_modal">
         <h2>{todo.task}</h2>
         <p>{todo.comment ? todo.comment : "Inga kommentarer"}</p>
-        <button className="delete_btn" onClick={() => deleteTodo(todo.id)}>Radera Todo</button>
+        <button className="delete_btn" onClick={() => deleteTodo(todo.id)}>
+          Radera Todo
+        </button>
       </div>
     );
   };
 
   const closeModal = (): void => setIsModalOpen(false);
 
-  const incompleteTodos = todos.filter(todo => !todo.isCompleted);
-  const completedTodos = todos.filter(todo => todo.isCompleted);
+  const incompleteTodos = todos.filter((todo) => !todo.isCompleted);
+  const completedTodos = todos.filter((todo) => todo.isCompleted);
 
   return (
     <>
       <div className="todoList">
         <ul>
-          {incompleteTodos.map(todo => (
-            <li key={todo.id} onClick={() => openModalToView(todo)} style={{ cursor: "pointer" }}>
+          {incompleteTodos.map((todo) => (
+            <li
+              key={todo.id}
+              onClick={() => openModalToView(todo)}
+              style={{ cursor: "pointer" }}
+            >
               {todo.task}
               <input
                 type="checkbox"
                 checked={todo.isCompleted}
-                onClick={e => e.stopPropagation()}
-                onChange={e => toggleTodoCompletion(todo.id, e.target.checked)}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) =>
+                  toggleTodoCompletion(todo.id, e.target.checked)
+                }
               />
             </li>
           ))}
@@ -104,14 +127,20 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
           Lägg till Todo
         </button>
         <ul>
-          {completedTodos.map(todo => (
-            <li key={todo.id} onClick={() => openModalToView(todo)} style={{ cursor: "pointer" }}>
+          {completedTodos.map((todo) => (
+            <li
+              key={todo.id}
+              onClick={() => openModalToView(todo)}
+              style={{ cursor: "pointer" }}
+            >
               {todo.task}
               <input
                 type="checkbox"
                 checked={todo.isCompleted}
-                onClick={e => e.stopPropagation()}
-                onChange={e => toggleTodoCompletion(todo.id, e.target.checked)}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) =>
+                  toggleTodoCompletion(todo.id, e.target.checked)
+                }
               />
             </li>
           ))}

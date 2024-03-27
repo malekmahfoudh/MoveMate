@@ -1,57 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { auth, db } from './firebase/firebase-config';
-import { signInAnonymously, onAuthStateChanged, User } from 'firebase/auth';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import React, { useState, useEffect } from "react";
+import { auth, db } from "./firebase/firebase-config";
+import { signInAnonymously, onAuthStateChanged, User } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
-import TodoList from './Components/todolist';
-import Header from './Components/header';
-import './Styles/MainPage.scss';
+import TodoList from "./Components/todolist";
+import Header from "./Components/header";
+import "./Styles/MainPage.scss";
 
 const MainPage = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-  const [currentAddress, setCurrentAddress] = useState('');
-  const [newAddress, setNewAddress] = useState('');
+  const [currentAddress, setCurrentAddress] = useState("");
+  const [newAddress, setNewAddress] = useState("");
   const [user, setUser] = useState<User | null>(null);
 
   const openOverlay = () => setIsOverlayOpen(true);
   const closeOverlay = () => setIsOverlayOpen(false);
 
-  // Fetch the current address from Firestore whenever the user state updates
+  //ADDRESS FETCHING, USER HANDLER AND ADDRESS CHANGE FROM FIREBASE
   useEffect(() => {
     const fetchAddresses = async () => {
       if (user) {
-        const userDocRef = doc(db, 'users', user.uid);
+        const userDocRef = doc(db, "users", user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setCurrentAddress(userData.currentAddress || '');
+          setCurrentAddress(userData.currentAddress || "");
         }
       }
     };
 
     fetchAddresses();
-  }, [user]); 
+  }, [user]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
       } else {
-        signInAnonymously(auth).catch(error => console.error(error));
+        signInAnonymously(auth).catch((error) => console.error(error));
       }
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Update the current address in Firestore
   const handleAddressChange = async () => {
-    if (user && newAddress.trim() !== '') {
-      const userDocRef = doc(db, 'users', user.uid);
+    if (user && newAddress.trim() !== "") {
+      const userDocRef = doc(db, "users", user.uid);
       await updateDoc(userDocRef, { currentAddress: newAddress });
 
       setCurrentAddress(newAddress);
-      setNewAddress('');
+      setNewAddress("");
       closeOverlay();
     }
   };
@@ -69,13 +68,15 @@ const MainPage = () => {
             <p>{currentAddress}</p>
             <label>Ny adress:</label>
             <input
-            className='address_input'
+              className="address_input"
               type="text"
               value={newAddress}
-              onChange={e => setNewAddress(e.target.value)}
+              onChange={(e) => setNewAddress(e.target.value)}
               placeholder="Ny adress"
             />
-            <button className='address_btn' onClick={handleAddressChange}>Spara</button>
+            <button className="address_btn" onClick={handleAddressChange}>
+              Spara
+            </button>
           </div>
         </div>
       )}
