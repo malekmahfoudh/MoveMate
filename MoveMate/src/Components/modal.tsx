@@ -8,7 +8,7 @@ interface ModalProps {
   setTask: (task: string) => void;
   comment: string;
   setComment: (comment: string) => void;
-  onAdd: () => void;
+  onAdd: (task: string, comment?: string) => Promise<void>; 
   children?: React.ReactNode;
 }
 

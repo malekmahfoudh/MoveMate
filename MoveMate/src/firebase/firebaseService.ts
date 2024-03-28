@@ -1,12 +1,15 @@
-// firebaseService.ts
-import { db } from './firebase-config'; // Fix import path
+import { db } from "./firebase-config";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
-export const saveAddress = async (userId: string, addressData: object): Promise<void> => {
-    await db.collection('addresses').doc(userId).set(addressData);
+export const saveAddress = async (
+  userId: string,
+  addressData: object
+): Promise<void> => {
+  await setDoc(doc(db, "addresses", userId), addressData);
 };
 
 export const getAddress = async (userId: string): Promise<object | null> => {
-    const addressDoc = await db.collection('addresses').doc(userId).get();
-    return addressDoc.exists ? addressDoc.data() : null;
+  const addressDocRef = doc(db, "addresses", userId);
+  const addressDoc = await getDoc(addressDocRef);
+  return addressDoc.exists() ? addressDoc.data() : null;
 };
-

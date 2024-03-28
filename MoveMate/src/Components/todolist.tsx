@@ -46,6 +46,9 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
     }
   }, [user]);
 
+  const [task, setTask] = useState("");
+  const [comment, setComment] = useState("");
+
   const addTodo = async (task: string, comment: string = ""): Promise<void> => {
     if (user && user.uid) {
       await addDoc(collection(db, "todos"), {
@@ -100,6 +103,7 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
 
   const incompleteTodos = todos.filter((todo) => !todo.isCompleted);
   const completedTodos = todos.filter((todo) => todo.isCompleted);
+  
 
   return (
     <>
@@ -146,7 +150,9 @@ const TodoList: React.FC<TodoListProps> = ({ user }) => {
           ))}
         </ul>
       </div>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
+
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} task={task} setTask={setTask} comment={comment} setComment={setComment} onAdd={addTodo}>
         {modalContent}
       </Modal>
     </>
